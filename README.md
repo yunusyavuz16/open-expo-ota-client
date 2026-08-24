@@ -2,6 +2,14 @@
 
 React Native client library for OpenExpoOTA - A self-hosted OTA update system for Expo apps.
 
+## Project components
+
+Part of [OpenExpoOTA](https://github.com/yunusyavuz16/open-expo-ota-backend), a self-hosted alternative to EAS Update:
+
+- **[open-expo-ota-backend](https://github.com/yunusyavuz16/open-expo-ota-backend)** — the update server: manifests, storage, auth
+- **[open-expo-ota-cli](https://github.com/yunusyavuz16/open-expo-ota-cli)** — publish updates from your machine or CI
+- **[open-expo-ota-client](https://github.com/yunusyavuz16/open-expo-ota-client)** — the Expo library your app installs to fetch updates *(this repo)*
+
 ## How It Works
 
 The OpenExpoOTA client works as a layer on top of Expo's built-in `expo-updates` package. Here's the flow:
