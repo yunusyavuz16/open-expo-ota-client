@@ -55,7 +55,13 @@ export default class SelfHostedUpdates {
    */
   private getAppBinaryVersion(): string {
     // Try to get the app version (binary version) from Constants
-    return Constants.expoConfig?.version || Constants.manifest?.version || '1.0.0';
+    return (
+      Constants.expoConfig?.version ||
+      // Legacy (SDK <= 48) manifest. Still read at runtime for older hosts; the current
+      // expo-constants types model this as EmbeddedManifest, which has no `version`.
+      (Constants.manifest as { version?: string } | null)?.version ||
+      '1.0.0'
+    );
   }
 
   /**

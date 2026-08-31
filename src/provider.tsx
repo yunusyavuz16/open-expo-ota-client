@@ -105,7 +105,7 @@ export const UpdatesProvider: React.FC<UpdatesProviderProps> = ({ children, conf
     });
 
     // Check for updates at the specified interval
-    let intervalId: NodeJS.Timeout | undefined;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
 
     if (config.checkInterval) {
       intervalId = setInterval(() => {

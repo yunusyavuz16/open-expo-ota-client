@@ -23,8 +23,11 @@ The key advantage is that you control the server, the update distribution, and c
 ## Installation
 
 ```bash
-npm install openexpoota-client expo-updates
+npm install open-expo-ota expo-updates
 ```
+
+The npm package is named `open-expo-ota` while this repository is named
+`open-expo-ota-client`. Install and import the package name, not the repository name.
 
 ## Quick Setup
 
@@ -79,8 +82,8 @@ Update your `app.json` to work with OpenExpoOTA:
 
 ```jsx
 import React from 'react';
-import { UpdatesProvider } from 'openexpoota-client';
-import { ReleaseChannel } from 'openexpoota-client';
+import { UpdatesProvider } from 'open-expo-ota';
+import { ReleaseChannel } from 'open-expo-ota';
 
 export default function App() {
   return (
@@ -106,7 +109,7 @@ export default function App() {
 ```jsx
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-import { useSelfHostedUpdates } from 'openexpoota-client';
+import { useSelfHostedUpdates } from 'open-expo-ota';
 
 function UpdateScreen() {
   const {
@@ -250,7 +253,7 @@ function UpdateWithProgress() {
 ### Event Listening
 
 ```jsx
-import SelfHostedUpdates from 'openexpoota-client/src/updates';
+import SelfHostedUpdates from 'open-expo-ota';
 
 // Direct usage of the updates class
 const updates = new SelfHostedUpdates({

@@ -1,6 +1,6 @@
 {
   "name": "open-expo-ota",
-  "version": "0.1.16",
+  "version": "0.1.19",
   "description": "Client library for OpenExpoOTA - A self-hosted OTA update system for Expo apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,13 +18,24 @@
     "expo",
     "react-native",
     "ota",
-    "updates"
+    "updates",
+    "ota-updates",
+    "expo-updates",
+    "eas-update",
+    "eas",
+    "self-hosted",
+    "codepush-alternative",
+    "over-the-air"
   ],
-  "author": "OpenExpoOTA Team",
+  "author": "Yunus Yavuz <developer.yunus.yavuz@gmail.com> (https://dayloflow.com)",
   "license": "MIT",
+  "homepage": "https://dayloflow.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yunusyavuz16/self-hosted-ota"
+    "url": "git+https://github.com/yunusyavuz16/open-expo-ota-client.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yunusyavuz16/open-expo-ota-client/issues"
   },
   "peerDependencies": {
     "expo-constants": "*",
