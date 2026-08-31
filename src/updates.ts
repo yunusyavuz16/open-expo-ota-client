@@ -165,6 +165,11 @@ export default class SelfHostedUpdates {
       const headers: Record<string, string> = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        // A cached manifest means the client never learns an update exists, so
+        // defeat every layer: response headers, a URL cache buster, and the
+        // fetch cache mode.
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
       };
 
       // Add app key if provided (backward compatibility)
@@ -172,7 +177,15 @@ export default class SelfHostedUpdates {
         headers['X-App-Key'] = this.config.appKey;
       }
 
-      const response = await fetch(url, { headers });
+      // Add cache-busting timestamp to URL
+      const cacheBuster = `&_t=${Date.now()}`;
+      const finalUrl = url + cacheBuster;
+      this.log('Final URL with cache buster:', finalUrl);
+
+      const response = await fetch(finalUrl, {
+        headers,
+        cache: 'no-cache'
+      });
 
       if (!response.ok) {
         // Handle different error cases

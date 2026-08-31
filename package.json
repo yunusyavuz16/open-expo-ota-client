@@ -1,6 +1,6 @@
 {
   "name": "open-expo-ota",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "Client library for OpenExpoOTA - A self-hosted OTA update system for Expo apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
