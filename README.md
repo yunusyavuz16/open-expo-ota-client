@@ -23,8 +23,14 @@ The key advantage is that you control the server, the update distribution, and c
 ## Installation
 
 ```bash
-npm install open-expo-ota expo-updates
+npx expo install open-expo-ota expo-updates expo-constants expo-application
 ```
+
+Use `npx expo install` rather than `npm install`. `expo-updates`, `expo-constants`
+and `expo-application` are native modules owned by your app, so they are peer
+dependencies here — `expo install` picks the versions matching your Expo SDK,
+where `npm install` would fetch the newest release of each and leave you with a
+native module built for a different SDK.
 
 The npm package is named `open-expo-ota` while this repository is named
 `open-expo-ota-client`. Install and import the package name, not the repository name.

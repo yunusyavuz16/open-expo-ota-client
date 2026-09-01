@@ -1,6 +1,6 @@
 {
   "name": "open-expo-ota",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "Client library for OpenExpoOTA - A self-hosted OTA update system for Expo apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -53,10 +53,18 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "expo-constants": "*",
-    "expo-application": "*",
-    "expo-updates": "*",
     "uuid": "^9.0.1",
     "semver": "^7.6.0"
+  },
+  "peerDependenciesMeta": {
+    "expo-application": {
+      "optional": false
+    },
+    "expo-constants": {
+      "optional": false
+    },
+    "expo-updates": {
+      "optional": false
+    }
   }
 }
