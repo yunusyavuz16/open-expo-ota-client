@@ -1,4 +1,5 @@
 import * as ExpoUpdates from 'expo-updates';
+import * as Application from 'expo-application';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import {
@@ -50,12 +51,15 @@ export default class SelfHostedUpdates {
     this.log('OpenExpoOTA client initialized with app slug:', this.config.appSlug);
   }
 
-  /**
-   * Get the app binary version from Constants
-   */
+  /** Get the immutable version from the installed native binary. */
   private getAppBinaryVersion(): string {
-    // Try to get the app version (binary version) from Constants
+    // `Constants.expoConfig.version` can be replaced by the running OTA manifest
+    // version, so it is not safe for binary target-range checks.
     return (
+      // expo-application is the only supported source since expo-constants
+      // deprecated nativeAppVersion. Guard the read anyway: a host that resolved
+      // the module but did not link it natively yields undefined rather than throwing.
+      Application?.nativeApplicationVersion ||
       Constants.expoConfig?.version ||
       // Legacy (SDK <= 48) manifest. Still read at runtime for older hosts; the current
       // expo-constants types model this as EmbeddedManifest, which has no `version`.
@@ -206,6 +210,17 @@ export default class SelfHostedUpdates {
         this.log('Update available:', manifest);
         this.log(`Found version ${manifest.version} - current runtime version is ${this.config.runtimeVersion}`);
 
+        // The server returns the latest compatible manifest even when that exact
+        // update is already running. Treat identical update IDs as up to date so
+        // checks do not repeatedly offer and download the current bundle.
+        const currentUpdateId = ExpoUpdates.updateId?.toLowerCase();
+        const manifestUpdateId = typeof manifest.id === 'string' ? manifest.id.toLowerCase() : null;
+        if (currentUpdateId && manifestUpdateId === currentUpdateId) {
+          this.log(`Already running update ${currentUpdateId}`);
+          this.emitEvent({ type: 'updateNotAvailable' });
+          return;
+        }
+
         // Check targetVersion compatibility on client side as additional verification
         const targetVersion = manifest.targetVersion;
         if (targetVersion && !this.isTargetVersionCompatible(targetVersion)) {
@@ -281,7 +296,7 @@ export default class SelfHostedUpdates {
 
         // If auto install is enabled, reload the app
         if (this.config.autoInstall) {
-          this.applyUpdate();
+          await this.applyUpdate();
         }
       } else {
         throw new Error('ExpoUpdates.fetchUpdateAsync not available');
@@ -300,14 +315,17 @@ export default class SelfHostedUpdates {
   /**
    * Apply a downloaded update
    */
-  applyUpdate(): void {
+  async applyUpdate(): Promise<void> {
     try {
       this.log('Applying update...');
 
       // Use expo-updates to reload the app if available
       if (ExpoUpdates && typeof ExpoUpdates.reloadAsync === 'function') {
-        ExpoUpdates.reloadAsync();
+        // reloadAsync tears down the JS context on success, so nothing after the
+        // await runs. Notify listeners first; still await it so a failed relaunch
+        // rejects here instead of being swallowed.
         this.emitEvent({ type: 'installed' });
+        await ExpoUpdates.reloadAsync();
       } else {
         throw new Error('ExpoUpdates.reloadAsync not available');
       }

@@ -29,6 +29,18 @@ npm install open-expo-ota expo-updates
 The npm package is named `open-expo-ota` while this repository is named
 `open-expo-ota-client`. Install and import the package name, not the repository name.
 
+### Upgrading to 0.1.21
+
+0.1.21 pulls in `expo-application`, a native module, to read the installed
+binary's version. `expo-constants` deprecated `nativeAppVersion` in favour of it,
+and the value it replaces — `Constants.expoConfig.version` — is rewritten by
+whichever OTA manifest is running, which made `--target-version` ranges compare
+against the update rather than the binary.
+
+Because a native module is involved, **rebuild the app after upgrading**; an
+over-the-air update cannot deliver this change. `applyUpdate()` also became
+`async` in this release, so `await` it if you need its failures.
+
 ## Quick Setup
 
 ### 1. Initialize Your App with the CLI
